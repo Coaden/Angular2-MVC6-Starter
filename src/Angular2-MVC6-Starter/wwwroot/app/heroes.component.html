@@ -1,0 +1,28 @@
+<div>        
+
+    <div class="row">
+        <div class="col-md-2">
+            <h2>My Heroes</h2>          
+            <button (click)="addHero()">Create</button>  
+            <ul class="heroes">
+                <li *ngFor="#hero of heroes"
+                [class.selected]="hero === selectedHero"
+                (click)="onSelect(hero)">
+                <span class="badge">{{hero.id}}</span> {{hero.name}}
+                </li>
+            </ul>
+        
+        </div>
+        
+        <div class="col-md-10">
+        
+            <div *ngIf="selectedHero">
+                <h2>{{selectedHero.name | uppercase}}</h2>
+                <h4>Power: {{selectedHero.power}}</h4>
+                <button (click)="gotoDetail()">View Details</button>
+            </div>
+            
+        </div>  
+    </div>
+</div>
+

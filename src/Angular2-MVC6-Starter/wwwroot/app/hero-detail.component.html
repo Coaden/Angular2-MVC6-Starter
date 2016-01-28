@@ -1,0 +1,53 @@
+<div class="container" *ngIf="hero">
+	
+    <h2 *ngIf="hero.name">{{hero.name}} details!</h2>
+	    
+    <form (ngSubmit)="onSubmit()" #heroForm="ngForm">
+            
+        <div>
+            <label>id: </label>{{hero.id}}
+        </div>
+        
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" placeholder="Enter the hero's name" 
+                required [(ngModel)]="hero.name" ngControl="name" #name="ngForm" #spy>
+            <div [hidden]="!showError(name)" class="alert alert-danger">
+                Name is required
+            </div>
+            Classes on this input: {{spy.className}}
+        </div>
+        
+        <div class="form-group">
+            <label for="power">Power</label>
+            <input type="text" class="form-control" placeholder="Enter the hero's power" 
+                [(ngModel)]="hero.power" ngControl="power">
+        </div>
+            
+        <div class="form-group">
+            <label for="alterEgo">Alter Ego</label>
+            <input type="text"  class="form-control" placeholder="Enter the hero's alter ego"
+                [(ngModel)]="hero.alterEgo" ngControl="alterEgo">
+        </div>
+        
+        <div class="form-group">
+            <label for="extraPower">Extra Power</label>
+            <select class="form-control"
+                 required [(ngModel)]="hero.extraPower" ngControl="extraPower">
+                <option *ngFor="#p of additionalPowers" [value]="p">{{p}}</option>
+            </select>
+        </div>
+
+        <button type="button" class="btn" (click)="goBack()">Back</button>
+        <button type="button" class="btn" (click)="deleteHero()">Delete</button>
+        <button type="submit" class="btn btn-default"
+            [disabled]="!heroForm.form.valid">Submit</button>
+        
+        <br/>
+        <div>{{hero | json}}</div>
+                
+    </form>
+</div>
+
+
+
