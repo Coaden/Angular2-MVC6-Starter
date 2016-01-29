@@ -12,9 +12,30 @@
         <environment names="Staging,Production">
             <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/css/bootstrap.min.css"
                   asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-                  asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-            <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+                  asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"/>
+            <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true"/>
         </environment>
+
+        <script>document.write('<base href="' + document.location + '" />');</script>
+
+        <script src="https://code.angularjs.org/2.0.0-beta.0/angular2-polyfills.js"></script>
+        <script src="https://code.angularjs.org/tools/system.js"></script>
+        <script src="https://code.angularjs.org/tools/typescript.js"></script>
+        <script src="https://code.angularjs.org/2.0.0-beta.0/Rx.js"></script>
+        <script src="https://code.angularjs.org/2.0.0-beta.0/angular2.dev.js"></script>
+        <script src="https://code.angularjs.org/2.0.0-beta.0/router.dev.js"></script>
+        <script src="https://code.angularjs.org/2.0.0-beta.0/http.dev.js"></script>
+
+        <script>
+          System.config({
+            transpiler: 'typescript',
+            typescriptOptions: { emitDecoratorMetadata: true, experimentalDecorators: true },
+            packages: {'app': {defaultExtension: 'ts'}}
+          });
+          System.import('app/boot')
+                .then(null, console.error.bind(console));
+        </script>
+
     </head>
     <body>
         <div class="navbar navbar-inverse navbar-fixed-top">
@@ -39,10 +60,14 @@
             </div>
         </div>
         <div class="container body-content">
+            <br />
+            <br />
+            <br />
             @RenderBody()
-            <hr />
+            <hr/>
             <footer>
-                <p>&copy; 2015 - Angular2_MVC6_Starter</p>
+                <br/>
+                <p>&copy; 2016 - Angular2_MVC6_Starter</p>
             </footer>
         </div>
 

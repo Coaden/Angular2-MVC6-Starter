@@ -48,7 +48,13 @@ namespace Angular2_MVC6_Starter
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddMvc();
+            services.AddMvc()
+                    //.AddJsonOptions(options =>
+                    //{
+                    //    options.SerializerSettings.ContractResolver =
+                    //    new CamelCasePropertyNamesContractResolver();
+                    //})
+                    ;
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -98,7 +104,6 @@ namespace Angular2_MVC6_Starter
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-            app.UseMvc();
         }
 
         // Entry point for the application.

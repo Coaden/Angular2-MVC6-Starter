@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using Microsoft.AspNet.Mvc;
 using Angular2_MVC6_Starter.Models;
+using Microsoft.AspNet.Authorization;
 
 namespace Angular2_MVC6_Starter.API
 {
@@ -18,7 +20,15 @@ namespace Angular2_MVC6_Starter.API
         [HttpGet]
         public IEnumerable<Hero> Get()
         {
-            return _dbContext.Heroes;
+            var user = HttpContext.User.GetUserName();
+            if (string.IsNullOrEmpty(user))
+            {
+                return _dbContext.Heroes;
+            }
+            else
+            {
+                return _dbContext.Heroes;
+            }
         }
 
 
@@ -61,7 +71,7 @@ namespace Angular2_MVC6_Starter.API
         [HttpDelete("{id:int}")]
         public IActionResult Delete(int id)
         {
-            var hero = _dbContext.Heroes.FirstOrDefault(h => h.Id == id);
+            var hero = _dbContext.Heroes.First(h => h.Id == id);
             _dbContext.Heroes.Remove(hero);
             _dbContext.SaveChanges();
             return new HttpStatusCodeResult(200);
