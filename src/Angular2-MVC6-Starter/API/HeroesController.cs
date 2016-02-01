@@ -59,11 +59,12 @@ namespace Angular2_MVC6_Starter.API
             else
             {
                 var original = _dbContext.Heroes.First(h => h.Id == hero.Id);
-                original.Name = hero.Name;
+                original.Name = hero.Name; 
                 original.Power = hero.Power;
                 original.ExtraPower = hero.ExtraPower;
                 original.AlterEgo = hero.AlterEgo;
                 _dbContext.SaveChanges();
+
                 return new ObjectResult(original);
             }
         }
