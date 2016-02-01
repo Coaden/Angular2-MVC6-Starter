@@ -58,7 +58,7 @@ namespace Angular2_MVC6_Starter.API
             }
             else
             {
-                var original = _dbContext.Heroes.FirstOrDefault(h => h.Id == hero.Id);
+                var original = _dbContext.Heroes.First(h => h.Id == hero.Id);
                 original.Name = hero.Name;
                 original.Power = hero.Power;
                 original.ExtraPower = hero.ExtraPower;
