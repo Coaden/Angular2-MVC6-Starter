@@ -18,20 +18,6 @@ gulp.task("clean", function (cb) {
     rimraf(paths.tsOutput, cb);
 });
 
-//var tsProject = ts.createProject({
-//    declarationFiles: true,
-//    noExternalResolve: false,
-//    module: 'system',
-//    removeComments: true,
-//    noImplicitAny: false,
-//    noEmitOnError: true,
-//    removeComments: false,
-//    sourceMap: true,
-//    target: "es5",
-//    experimentalDecorators: true,
-//    moduleResolution: "node"
-//});
-
 var tsProject = ts.createProject("./" + project.webroot + '/tsconfig.json');
 
 gulp.task('ts-compile', function () {

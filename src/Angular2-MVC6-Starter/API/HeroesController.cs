@@ -42,8 +42,8 @@ namespace Angular2_MVC6_Starter.API
             }
         }
 
-        [HttpPost]
         [Authorize]
+        [HttpPost]
         public IActionResult Post([FromBody] Hero hero)
         {
             if (hero.Id == 0)
