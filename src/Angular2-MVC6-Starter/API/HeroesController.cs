@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNet.Mvc;
@@ -17,21 +18,16 @@ namespace Angular2_MVC6_Starter.API
             _dbContext = dbContext;
         }
 
+        [Authorize]
         [HttpGet]
         public IEnumerable<Hero> Get()
         {
-            var user = HttpContext.User.GetUserName();
-            if (string.IsNullOrEmpty(user))
-            {
-                return _dbContext.Heroes;
-            }
-            else
-            {
-                return _dbContext.Heroes;
-            }
+            var name = User.Identity.Name;
+            Console.WriteLine(name + " query'd the Heroes.");
+            return _dbContext.Heroes;
         }
 
-
+        [Authorize]
         [HttpGet("{id:int}")]
         public IActionResult Get(int id)
         {
@@ -46,8 +42,8 @@ namespace Angular2_MVC6_Starter.API
             }
         }
 
-
         [HttpPost]
+        [Authorize]
         public IActionResult Post([FromBody] Hero hero)
         {
             if (hero.Id == 0)
@@ -59,7 +55,7 @@ namespace Angular2_MVC6_Starter.API
             else
             {
                 var original = _dbContext.Heroes.First(h => h.Id == hero.Id);
-                original.Name = hero.Name; 
+                original.Name = hero.Name;
                 original.Power = hero.Power;
                 original.ExtraPower = hero.ExtraPower;
                 original.AlterEgo = hero.AlterEgo;
@@ -69,6 +65,7 @@ namespace Angular2_MVC6_Starter.API
             }
         }
 
+        [Authorize]
         [HttpDelete("{id:int}")]
         public IActionResult Delete(int id)
         {

@@ -3,6 +3,7 @@ import {RouteParams} from 'angular2/router';
 import {NgForm}    from 'angular2/common';
 import {Hero} from './hero';
 import {HeroService} from './hero.service';
+import {Logger} from './logger.service';
 
 @Component({
   selector: 'my-hero-detail',
@@ -16,7 +17,7 @@ export class HeroDetailComponent implements OnInit {
   private additionalPowers = ['Really Smart', 'Super Flexible',
             'Super Hot', 'Weather Changer'];
 
-  constructor(private _heroService: HeroService,
+  constructor(private _heroService: HeroService, private _logger: Logger,
     private _routeParams: RouteParams) {
   }
 
@@ -26,7 +27,11 @@ export class HeroDetailComponent implements OnInit {
       if(id === 0) {
         this.hero = new Hero(0, '', '', '', '');
       } else {
-        this._heroService.getHero(id).then(hero => this.hero = hero);
+          this._heroService.getHero(id)
+          .subscribe(hero => {
+              this.hero = hero;
+              this._logger.log("We got hero # " + hero.id);
+        });         
       }
     }
   }

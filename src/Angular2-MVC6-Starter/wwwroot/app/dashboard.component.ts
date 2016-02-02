@@ -17,10 +17,10 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
       this._heroService.getHeroes()
-        .then(heroes => {
-          var maxHeroes = heroes.length < 4 ? heroes.length : 4;
-          this.heroes = heroes.slice(0,maxHeroes);
-          this._logger.log("We got " + this.heroes.length + " heros");
+        .subscribe(heroes => {
+            var maxHeroes = heroes.length < 4 ? heroes.length : 4;
+            this.heroes = heroes.slice(0, maxHeroes);
+            this._logger.log("We got " + this.heroes.length + " heros");
         });
   }
 

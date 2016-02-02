@@ -1,74 +1,78 @@
 import {Injectable} from 'angular2/core';
+import { Http, HTTP_PROVIDERS, Response, Headers } from 'angular2/http';
 import {Hero} from './hero';
 import {Logger} from './logger.service';
+import 'rxjs/add/operator/map';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class HeroService {
-
-    private _heroes: Hero[] = [];
     
-    constructor(private _logger: Logger) { }
+    private endPoint: string = 'http://localhost:57275/api/Heroes/';
 
-    getHeroes(): PromiseLike<Hero[]> {
+    constructor(public _http: Http, private _logger: Logger) { }
+    
+    getHeroes(): Observable<Array<Hero>> {
         
-        // if(this._heroes.length > 0)
-        //     return Promise.resolve(this._heroes);
-
-        return new Promise(resolve => fetch('http://localhost:57275/api/Heroes')
-            .then((result: any) => result.json())
-            .then((json: any) => {
-                this._heroes = [];
-                json.forEach(h => {
-                    let hero: Hero = new Hero(<number>h.Id, 
-                                <string>h.Name, 
-                                <string>h.Power,
-                                <string>h.ExtraPower,
-                                <string>h.AlterEgo
-                                );
-                    this._heroes.push(hero);
-                });
-                resolve(this._heroes);
-            })
-            .catch((error) => {
-                this._logger.error(error.message);
-            })    
-        );
-	}
-
-	getHero(id: number) {
-        return this.getHeroes()
-        .then(heroes => heroes.filter(h => h.id === id)[0]);
+       return this._http
+           .get(this.endPoint)
+           .map((res: Response) => res.json())
+           // this additional map is required to convert json array to a valid js Hero[] obj
+           .map((json: any) => {
+               let heroes: Array<Hero> = [];
+               json.forEach(h => {
+                   let hero: Hero = new Hero(  h.Id as number,
+                                               h.Name as string,
+                                               h.Power as string,
+                                               h.ExtraPower as string,
+                                               h.AlterEgo as string
+                   );
+                   heroes.push(hero);
+               });
+               return heroes;
+           });
+    }
+    
+  	getHero(id: number) {
+        
+        return this._http
+            .get(this.endPoint + id)
+            .map((res: Response) => res.json())
+            // this additional map is required to convert json hero to a valid js Hero obj
+            .map((json: any) => {
+                let hero: Hero = new Hero(  json.Id as number,
+                                            json.Name as string,
+                                            json.Power as string,
+                                            json.ExtraPower as string,
+                                            json.AlterEgo as string
+                );
+                return hero;
+            });
 	}
     
     saveHero(hero: Hero) {
+        
+        var headers = new Headers();
+        headers.append('Accept', 'application/json');
+        headers.append('Content-Type', 'application/json');
 
-        fetch('http://localhost:57275/api/Heroes', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(hero)
-        })
-       .then((result: any) => result.json())
-       .then((json) => {
-            hero.id = json.Id;
-        })
-        .catch((error) => {
-            this._logger.error(error.message);
-        });       
+        this._http.post(this.endPoint, JSON.stringify(hero), {headers: headers})
+            .map(res => res.json)
+            .subscribe(
+                data => this._logger.log(data),
+                err => this._logger.error(err),
+                () => this._logger.log('Hero save complete!')
+            );   
     }
     
     deleteHero(id: number) {
-
-        fetch('http://localhost:57275/api/Heroes/' + id, {
-            
-            method: 'DELETE',
-        })
-       .then((result: any) => result.json())
-       .then((json) => {})
-       .catch((error) => {
-           this._logger.error(error.message);
-       });      
+        
+        this._http.delete(this.endPoint + id)
+            .map(res => res.json)
+            .subscribe(
+                data => this._logger.log(data),
+                err => this._logger.error(err),
+                () => this._logger.log('Hero delete complete!')
+            );
     }
 }
